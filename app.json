@@ -1,0 +1,15 @@
+{
+  "expo": {
+    "name": "RN Splash Login Dashboard",
+    "slug": "rn-splash-login-dashboard",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "backgroundColor": "#2563eb"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  }
+}
