@@ -10,17 +10,23 @@ import {
   View,
 } from 'react-native';
 
-import { loginWithUsernamePassword } from '../services/authService';
+import { registerWithUsernamePassword } from '../services/authService';
 
-export default function LoginScreen({ onLoginSuccess, navigation }) {
+export default function RegisterScreen({ navigation }) {
   const [username, setUsername] = useState('eve.holt@reqres.in');
-  const [password, setPassword] = useState('cityslicka');
+  const [password, setPassword] = useState('pistol');
+  const [confirmPassword, setConfirmPassword] = useState('pistol');
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleLogin = async () => {
-    if (!username.trim() || !password.trim()) {
-      setError('Username and password are required.');
+  const handleRegister = async () => {
+    if (!username.trim() || !password.trim() || !confirmPassword.trim()) {
+      setError('All fields are required.');
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      setError('Password and confirm password must match.');
       return;
     }
 
@@ -28,8 +34,8 @@ export default function LoginScreen({ onLoginSuccess, navigation }) {
     setError('');
 
     try {
-      await loginWithUsernamePassword(username.trim(), password);
-      onLoginSuccess();
+      await registerWithUsernamePassword(username.trim(), password);
+      navigation.replace('Login');
     } catch (err) {
       setError(err.message);
     } finally {
@@ -43,13 +49,13 @@ export default function LoginScreen({ onLoginSuccess, navigation }) {
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
     >
       <View style={styles.card}>
-        <Text style={styles.title}>Welcome Back 👋</Text>
-        <Text style={styles.subtitle}>Login with username and password</Text>
+        <Text style={styles.title}>Create Account</Text>
+        <Text style={styles.subtitle}>Set up your account to continue</Text>
 
         <TextInput
           value={username}
           onChangeText={setUsername}
-          placeholder="Username"
+          placeholder="Email"
           autoCapitalize="none"
           keyboardType="email-address"
           style={styles.input}
@@ -65,10 +71,19 @@ export default function LoginScreen({ onLoginSuccess, navigation }) {
           placeholderTextColor="#64748b"
         />
 
+        <TextInput
+          value={confirmPassword}
+          onChangeText={setConfirmPassword}
+          placeholder="Confirm Password"
+          secureTextEntry
+          style={styles.input}
+          placeholderTextColor="#64748b"
+        />
+
         {!!error && <Text style={styles.error}>{error}</Text>}
 
         <Pressable
-          onPress={handleLogin}
+          onPress={handleRegister}
           disabled={isLoading}
           style={({ pressed }) => [
             styles.button,
@@ -78,14 +93,12 @@ export default function LoginScreen({ onLoginSuccess, navigation }) {
           {isLoading ? (
             <ActivityIndicator color="#fff" />
           ) : (
-            <Text style={styles.buttonText}>Login</Text>
+            <Text style={styles.buttonText}>Create Account</Text>
           )}
         </Pressable>
 
-        <Text style={styles.hint}>Demo API credentials are pre-filled.</Text>
-
-        <Pressable onPress={() => navigation.navigate('Register')}>
-          <Text style={styles.link}>New here? Create an account</Text>
+        <Pressable onPress={() => navigation.replace('Login')}>
+          <Text style={styles.link}>Already have an account? Login</Text>
         </Pressable>
       </View>
     </KeyboardAvoidingView>
@@ -151,12 +164,6 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontWeight: '600',
     fontSize: 16,
-  },
-  hint: {
-    marginTop: 14,
-    color: '#475569',
-    fontSize: 12,
-    textAlign: 'center',
   },
   link: {
     marginTop: 14,
