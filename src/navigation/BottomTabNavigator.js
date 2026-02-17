@@ -7,6 +7,7 @@ import EventsScreen from '../screens/EventsScreen';
 import EditProfileScreen from '../screens/EditProfileScreen';
 import HomeScreen from '../screens/HomeScreen';
 import OffersScreen from '../screens/OffersScreen';
+import SportRadarScreen from '../screens/SportRadarScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 
 const Tab = createBottomTabNavigator();
@@ -16,6 +17,7 @@ const iconMap = {
   Home: 'home',
   Events: 'calendar',
   Offers: 'pricetag',
+  Radar: 'speedometer',
   Profile: 'person',
 };
 
@@ -61,6 +63,7 @@ export default function BottomTabNavigator({ onLogout }) {
       <Tab.Screen name="Home" component={HomeScreen} />
       <Tab.Screen name="Events" component={EventsScreen} />
       <Tab.Screen name="Offers" component={OffersScreen} />
+      <Tab.Screen name="Radar" component={SportRadarScreen} />
       <Tab.Screen
         name="Profile"
         options={{ headerShown: false }}
